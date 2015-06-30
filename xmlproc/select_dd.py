@@ -1,12 +1,13 @@
-import split, sys, outputters
+#!/usr/bin/env python
+# $Id: dd.py,v 2.4 2005/04/28 20:37:11 zeller Exp $
+
+import split
 from listsets import listminus, listunion
-from xml.parsers.xmlproc import xmlproc
+import re
 
 PASS       = "PASS"
 FAIL       = "FAIL"
 UNRESOLVED = "UNRESOLVED"
-
-TEMP_FILE = "temp.xml"
 
 def dd(c_pass, c_fail, test, splitter = None):
     """Return a triple (DELTA, C_PASS', C_FAIL') such that
@@ -18,13 +19,13 @@ def dd(c_pass, c_fail, test, splitter = None):
         splitter = split.split
 
     n = 2
-
+    
     while 1:
-        assert test(c_pass) == PASS or UNRESOLVED
+        assert test(c_pass) == PASS
         assert test(c_fail) == FAIL
         assert n >= 2
 
-        delta = listminus(c_fail, c_pass) #c_fail-c_pass
+        delta = listminus(c_fail, c_pass)
 
         if n > len(delta):
             # No further minimizing
@@ -43,7 +44,7 @@ def dd(c_pass, c_fail, test, splitter = None):
             if test(next_c_fail) == FAIL and n == 2:
                 c_fail = next_c_fail
                 n = 2; offset = 0; break
-            elif test(next_c_fail) == PASS or UNRESOLVED:
+            elif test(next_c_fail) == PASS:
                 c_pass = next_c_fail
                 n = 2; offset = 0; break
             elif test(next_c_pass) == FAIL:
@@ -52,7 +53,7 @@ def dd(c_pass, c_fail, test, splitter = None):
             elif test(next_c_fail) == FAIL:
                 c_fail = next_c_fail
                 n = max(n - 1, 2); offset = i; break
-            elif test(next_c_pass) == PASS or UNRESOLVED:
+            elif test(next_c_pass) == PASS:
                 c_pass = next_c_pass
                 n = max(n - 1, 2); offset = i; break
             else:
@@ -67,32 +68,13 @@ def dd(c_pass, c_fail, test, splitter = None):
 if __name__ == "__main__":
     tests = {}
     c_fail = []
-    warnings = 1
-    entstack = 0
-    rawxml = 0
-
-    if len(sys.argv) < 2:
-        print 'Please input file'
-        sys.exit()
-
-    fname = sys.argv[1]
-    file = open(fname, 'r')
-    data = file.read()
-    file.close()
-
-    app = xmlproc.Application()
-    p = xmlproc.XMLProcessor()
-    p.set_application(app)
-    err = outputters.MyErrorHandler(p, p, warnings, entstack, rawxml)
-    p.set_error_handler(err)
-    p.set_data_after_wf_error(0)
 
     def string_to_list(s):
         c = []
         for i in range(len(s)):
             c.append((i, s[i]))
         return c
-
+    
     def mytest(c):
         global tests
         global c_fail
@@ -114,35 +96,20 @@ if __name__ == "__main__":
                 x += map[i]
             else:
                 x += "."
-        
-        f = open(TEMP_FILE, 'w')
-        f.write(s)
-        f.close()
 
-        try:
-            p.parse_resource(TEMP_FILE)
-            if err.errors == 0:
-                print PASS
-                tests[s] = PASS
-                return PASS
-            else:
-                print UNRESOLVED
-                tests[s] = UNRESOLVED
-                return UNRESOLVED
-                #print PASS
-                #tests[s] = PASS
-                #return PASS
-        except UnboundLocalError:
+        print "%02i" % (len(tests.keys()) + 1), "Testing", `x`,
+        
+        if s != "" and re.match("<SELECT.*>", s):
             print FAIL
             tests[s] = FAIL
             return FAIL
 
+        print PASS
+        tests[s] = PASS
+        return PASS
+
     c_pass = []
-    c_fail = string_to_list(data)
-    (delta, c_pass, c_fail) = dd(c_pass, c_fail, mytest)
-    print "==========delta=========="
-    print delta 
-    print "==========c_pass=========="
-    print c_pass
-    print "==========c_fail=========="
-    print c_fail
+    c_fail = string_to_list('<SELECT NAME="priority" MULTIPLE SIZE=7>')
+    # mytest(c_fail)
+    
+    print dd(c_pass, c_fail, mytest)

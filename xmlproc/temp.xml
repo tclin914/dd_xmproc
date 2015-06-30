@@ -1,1 +1,58 @@
-GG&#4;HHZ2J~G
+#x04a; python.org</title>
+  <desc>This is a collection of topic guides as a part of the Python
+  language website. Among the topics are XML, databases, Tkinter and
+  web programming.</desc>
+  </bookmark>
+
+  <bookmark href="http://www.python.org/doc/howto/">
+  <title>HOWTOs @ python.org</title>
+  <desc>A collection of HOWTO guides, covering Medusa, Curses, Qt,
+  regular expressions and XML, among other things.</desc>
+  </bookmark>
+  
+</folder>
+
+<folder>
+<title>Development environments</title>
+
+  <bookmark href="http://www.python.org/emacs/">
+  <title>Emacs modes for Python</title>
+  <desc>This site contains some useful elisp packages such as a Python mode,
+  a debugger mode etc.</desc>
+  </bookmark>
+  
+  <bookmark href="http://starship.skyport.net/crew/zack/ptui/">
+  <title>PTUI</title>
+  <desc>A Tkinter-based IDE by Zachary Roadhouse.</desc>
+  </bookmark>
+  
+  <bookmark href="http://www.netins.net/showcase/Comput-IT/cooledit/index2.html">
+  <title>CoolEdit</title>
+  <desc>A text editor with Python scripting internally. XWindows-only.</desc>
+  </bookmark>
+  
+  <bookmark href="http://www.idmcomp.com/products/">
+  <title>UltraEdit</title>
+  <desc>A general text editor for Windows. Python syntax support can be
+  downloaded separately.</desc>
+  </bookmark>
+   
+</folder>
+
+<folder>
+<title>Miscellaneous</title>
+
+  <bookmark href="http://www.pythonjournal.com/">
+  <title>The Python Journal</title>
+  <desc>A web journal devoted to Python.</desc>
+  </bookmark>
+
+  <bookmark href="http://www.automatrix.com/~skip/python/fastpython.html">
+  <title>Python-Friendly ISPs</title>
+  <desc>A list of web host providers that also provide Python access for
+  CGI and suchlike.</desc>
+  </bookmark>
+
+</folder>
+  
+</xbel>
